@@ -2,6 +2,7 @@ package com.sy.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PageController {
@@ -19,5 +20,10 @@ public class PageController {
     @GetMapping("/shelf")
     public String shelf() {
         return "shelf";
+    }
+
+    @GetMapping("/book/{id}")
+    public String bookDetail(@PathVariable Long id) {
+        return "book-detail";
     }
 } 
