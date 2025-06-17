@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sy.domain.Book;
 import com.sy.domain.Note;
+import com.sy.dto.BookNoteDetailRequest;
 import com.sy.dto.BookNoteDetailResponse;
 
 @Service
@@ -89,6 +90,16 @@ public class BookServiceImpl implements BookService {
         bookList.add(book2);
 
         return bookList;
+    }
+
+    @Override
+    public void createNote(BookNoteDetailRequest request) {
+        // TODO: DB 저장 구현 후 삭제
+        System.out.println("new note created!");
+        System.out.println(request.getTitle());
+        System.out.println(request.getAuthor());
+        System.out.println(request.getPublisher());
+        System.out.println(request.getContent());
     }
 
 } 
