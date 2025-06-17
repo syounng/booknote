@@ -34,12 +34,7 @@ public class PageController {
     
     @GetMapping("/booklist")
     public List<Book> getBookList() {
-        List<Book> bookList = bookService.getBookList();
-        for (Book book : bookList) {
-            System.out.println("book = " + book.toString());
-        }
-        // return bookService.getBookList();
-        return bookList;
+        return bookService.getBookList();
     }
 
     @GetMapping("/book/{id}")
