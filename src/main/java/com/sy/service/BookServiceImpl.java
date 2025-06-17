@@ -7,11 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.sy.domain.Book;
 import com.sy.domain.Note;
+import com.sy.domain.NoteRepository;
 import com.sy.dto.BookNoteDetailRequest;
 import com.sy.dto.BookNoteDetailResponse;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
+
+    private final NoteRepository noteRepository;
     
     @Override
     public Book findBookById(Long id) {
@@ -31,13 +37,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Note findNoteById(Long id) {
-        // TODO: setter 삭제 후 DB 조회 구현
     
-        Note note = new Note();
-
-        note.setId(id);
-        note.setContent("독서 기록 내용");
-        note.setCreatedDate("2025-01-01");
+        Note note = noteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Note not found"));
 
         return note;
     }
@@ -94,12 +96,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void createNote(BookNoteDetailRequest request) {
-        // TODO: DB 저장 구현 후 삭제
-        System.out.println("new note created!");
-        System.out.println(request.getTitle());
-        System.out.println(request.getAuthor());
-        System.out.println(request.getPublisher());
-        System.out.println(request.getContent());
+        // TODO: transactional 적용
+
+        Note note = Note.builder()
+            .title(request.getTitle())
+            .content(request.getContent())
+            .createdDate(request.getCreatedDate())
+            .build();
+        
+        noteRepository.save(note);
     }
 
 } 
