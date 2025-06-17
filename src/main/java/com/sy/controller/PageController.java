@@ -1,29 +1,37 @@
 package com.sy.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.sy.dto.BookNoteDetailResponse;
+import com.sy.service.BookService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
 public class PageController {
+
+    private final BookService bookService;
     
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+    // @GetMapping("/login")
+    // public String login() {
+    //     return "login";
+    // }
     
-    @GetMapping("/join")
-    public String join() {
-        return "join";
-    }
+    // @GetMapping("/join")
+    // public String join() {
+    //     return "join";
+    // }
     
-    @GetMapping("/shelf")
-    public String shelf() {
-        return "shelf";
-    }
+    // @GetMapping("/shelf")
+    // public String shelf() {
+    //     return "shelf";
+    // }
 
     @GetMapping("/book/{id}")
-    public String bookDetail(@PathVariable Long id) {
-        return "book-detail";
+    public BookNoteDetailResponse bookDetail(@PathVariable Long id) {
+        return bookService.getBookNoteDetail(id);
     }
 } 
