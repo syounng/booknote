@@ -1,11 +1,11 @@
 package com.sy.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.sy.domain.Book;
+import com.sy.domain.BookRepository;
 import com.sy.domain.Note;
 import com.sy.domain.NoteRepository;
 import com.sy.dto.BookNoteDetailRequest;
@@ -18,21 +18,12 @@ import lombok.RequiredArgsConstructor;
 public class BookServiceImpl implements BookService {
 
     private final NoteRepository noteRepository;
+    private final BookRepository bookRepository;
     
     @Override
     public Book findBookById(Long id) {
-        // TODO: setter 삭제 후 DB 조회 구현
-
-        Book book = new Book();
-
-        book.setId(id);
-        book.setTitle("책 제목");
-        book.setAuthor("저자명");
-        book.setPublisher("출판사");
-        book.setCoverImage("/images/book-cover.jpg");
-        book.setDescription("책 설명");
-
-        return book;
+        return bookRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Book not found"));
     }
 
     @Override
@@ -70,28 +61,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBookList() {
-        // TODO: DB 조회 구현
-        List<Book> bookList = new ArrayList<>();
-
-        Book book1 = new Book();
-        book1.setId(1L);
-        book1.setTitle("책 제목");
-        book1.setAuthor("저자명");
-        book1.setPublisher("출판사");
-        book1.setCoverImage("/images/book-cover.jpg");
-
-        bookList.add(book1);
-
-        Book book2 = new Book();
-        book2.setId(2L);
-        book2.setTitle("책 제목2");
-        book2.setAuthor("저자명2");
-        book2.setPublisher("출판사2");
-        book2.setCoverImage("/images/book-cover2.jpg");
-
-        bookList.add(book2);
-
-        return bookList;
+        return bookRepository.findAll();
     }
 
     @Override

@@ -32,9 +32,14 @@ public class PageController {
     //     return "join";
     // }
     
-    @GetMapping("/shelf")
-    public List<Book> shelf() {
-        return bookService.getBookList();
+    @GetMapping("/booklist")
+    public List<Book> getBookList() {
+        List<Book> bookList = bookService.getBookList();
+        for (Book book : bookList) {
+            System.out.println("book = " + book.toString());
+        }
+        // return bookService.getBookList();
+        return bookList;
     }
 
     @GetMapping("/book/{id}")

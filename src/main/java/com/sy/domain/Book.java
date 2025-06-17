@@ -5,13 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
-/* TODO: DB 구현 후 삭제 */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@Setter
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +34,9 @@ public class Book {
 
     @Column(name = "description")
     private String description;
+
+    @Override
+    public String toString() {
+        return "[Book] : bookName = " + title;
+    }
 }
