@@ -1,5 +1,8 @@
 package com.sy.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sy.domain.Book;
@@ -60,6 +63,32 @@ public class BookServiceImpl implements BookService {
         response.setCreatedDate("2025-01-01");
 
         return response;
+    }
+
+    @Override
+    public List<Book> getBookList() {
+        // TODO: DB 조회 구현
+        List<Book> bookList = new ArrayList<>();
+
+        Book book1 = new Book();
+        book1.setId(1L);
+        book1.setTitle("책 제목");
+        book1.setAuthor("저자명");
+        book1.setPublisher("출판사");
+        book1.setCoverImage("/images/book-cover.jpg");
+
+        bookList.add(book1);
+
+        Book book2 = new Book();
+        book2.setId(2L);
+        book2.setTitle("책 제목2");
+        book2.setAuthor("저자명2");
+        book2.setPublisher("출판사2");
+        book2.setCoverImage("/images/book-cover2.jpg");
+
+        bookList.add(book2);
+
+        return bookList;
     }
 
 } 

@@ -1,9 +1,12 @@
 package com.sy.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sy.domain.Book;
 import com.sy.dto.BookNoteDetailResponse;
 import com.sy.service.BookService;
 
@@ -25,10 +28,10 @@ public class PageController {
     //     return "join";
     // }
     
-    // @GetMapping("/shelf")
-    // public String shelf() {
-    //     return "shelf";
-    // }
+    @GetMapping("/shelf")
+    public List<Book> shelf() {
+        return bookService.getBookList();
+    }
 
     @GetMapping("/book/{id}")
     public BookNoteDetailResponse bookDetail(@PathVariable Long id) {
