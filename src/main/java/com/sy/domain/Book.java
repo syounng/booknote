@@ -1,10 +1,14 @@
 package com.sy.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +38,9 @@ public class Book {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "book")
+    private List<Note> notes = new ArrayList<>();
 
     @Override
     public String toString() {

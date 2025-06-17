@@ -3,13 +3,14 @@ package com.sy.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sy.domain.Book;
 import com.sy.domain.BookRepository;
 import com.sy.domain.Note;
 import com.sy.domain.NoteRepository;
-import com.sy.dto.BookNoteDetailRequest;
 import com.sy.dto.BookNoteDetailResponse;
+import com.sy.dto.CreateNoteRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,27 +37,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookNoteDetailResponse getBookNoteDetail(Long id){
-        // TODO: setter 삭제 후 DB 조회 구현
+    public BookNoteDetailResponse getBookNoteDetail(Long id) {
+        Book book = findBookById(id);
+        Note note = findNoteById(id);
 
-        // TODO: API 검증 후 주석 해제
-        // Book book = findBookById(id);
-        // Note note = findNoteById(id);
-
-        BookNoteDetailResponse response = new BookNoteDetailResponse();
-        
-        response.setBookId(id);
-        response.setTitle("책 제목");
-        response.setAuthor("저자명");
-        response.setPublisher("출판사");
-        response.setCoverImage("/images/book-cover.jpg");
-        response.setDescription("책 설명");
-
-        response.setNoteId(id);
-        response.setContent("독서 기록 내용");
-        response.setCreatedDate("2025-01-01");
-
-        return response;
+        return BookNoteDetailResponse.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImage(book.getCoverImage())
+                .description(book.getDescription())
+                .noteId(note.getId())
+                .content(note.getContent())
+                .createdDate(note.getCreatedDate())
+                .build();
     }
 
     @Override
@@ -65,13 +60,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void createNote(BookNoteDetailRequest request) {
-        // TODO: transactional 적용
-
+    @Transactional
+    public void createNote(Long bookId, CreateNoteRequest request) {
+        Book foundBook = bookRepository.findById(bookId) 
+            .orElseThrow(() -> new RuntimeException("Book not found"));
+        
         Note note = Note.builder()
             .title(request.getTitle())
             .content(request.getContent())
-            .createdDate(request.getCreatedDate())
+            .book(foundBook)
             .build();
         
         noteRepository.save(note);
