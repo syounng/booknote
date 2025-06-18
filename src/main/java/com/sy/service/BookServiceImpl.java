@@ -13,6 +13,7 @@ import com.sy.dto.BookNoteDetailResponse;
 import com.sy.dto.CreateNoteRequest;
 import com.sy.dto.BookResponse;
 import com.sy.dto.NoteResponse;
+import com.sy.dto.CreateBookRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -132,6 +133,25 @@ public class BookServiceImpl implements BookService {
             noteRepository.delete(foundNote);
         } catch (Exception e) {
             throw new RuntimeException("노트를 삭제하지 못했습니다.");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void createBook(CreateBookRequest request) {
+        
+        Book book = Book.builder()
+                .title(request.getTitle())
+                .author(request.getAuthor())
+                .publisher(request.getPublisher())
+                .coverImage(request.getCoverImage())
+                .description(request.getDescription())
+                .build();
+
+        try{
+            bookRepository.save(book);
+        } catch (Exception e) {
+            throw new RuntimeException("책을 저장하지 못했습니다.");
         }
     }
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sy.dto.BookNoteDetailResponse;
 import com.sy.dto.BookResponse;
+import com.sy.dto.CreateBookRequest;
 import com.sy.dto.CreateNoteRequest;
 import com.sy.jwt.JwtUtil;
 import com.sy.service.BookService;
@@ -28,6 +29,11 @@ public class PageController {
     @GetMapping("/booklist")
     public List<BookResponse> getBookList() {
         return bookService.getBookList();
+    }
+
+    @PostMapping("/booklist")
+    public void createBook(@RequestBody CreateBookRequest request) {
+        bookService.createBook(request);
     }
 
     @GetMapping("/book/{id}")
