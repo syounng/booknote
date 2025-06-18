@@ -1,11 +1,13 @@
 package com.sy.dto;
 
+import java.time.LocalDateTime;
+
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 /* TODO: DB 구현 후 삭제 */
 @Getter
-@Setter
+@Builder
 public class BookNoteDetailResponse {
     private Long bookId;
     private String title;
@@ -16,5 +18,5 @@ public class BookNoteDetailResponse {
 
     private Long noteId;
     private String content;
-    private String createdDate;
+    private LocalDateTime createdDate;
 } 

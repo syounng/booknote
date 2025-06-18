@@ -1,16 +1,23 @@
 package com.sy.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-/* TODO: DB 구현 후 삭제 */
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Note {
     @Id
@@ -24,5 +31,17 @@ public class Note {
     private String content;
 
     @Column(name = "created_date")
-    private String createdDate;
+    private LocalDateTime createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    @Builder
+    public Note(String title, String content, Book book) {
+        this.title = title;
+        this.content = content;
+        this.book = book;
+        this.createdDate = LocalDateTime.now();
+    }
 }

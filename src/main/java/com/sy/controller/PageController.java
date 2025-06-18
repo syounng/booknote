@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sy.domain.Book;
-import com.sy.dto.BookNoteDetailRequest;
 import com.sy.dto.BookNoteDetailResponse;
+import com.sy.dto.CreateNoteRequest;
 import com.sy.service.BookService;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,18 +31,18 @@ public class PageController {
     //     return "join";
     // }
     
-    @GetMapping("/shelf")
-    public List<Book> shelf() {
+    @GetMapping("/booklist")
+    public List<Book> getBookList() {
         return bookService.getBookList();
     }
 
     @GetMapping("/book/{id}")
-    public BookNoteDetailResponse bookDetail(@PathVariable Long id) {
+    public BookNoteDetailResponse getBookNoteDetail(@PathVariable Long id) {
         return bookService.getBookNoteDetail(id);
     }
 
     @PostMapping("/book/{id}")
-    public void createNote(@RequestBody BookNoteDetailRequest request) {
-        bookService.createNote(request);
+    public void createNote(@PathVariable Long id, @RequestBody CreateNoteRequest request) {
+        bookService.createNote(id, request);
     }
 } 

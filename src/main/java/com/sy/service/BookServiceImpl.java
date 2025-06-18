@@ -1,15 +1,16 @@
 package com.sy.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sy.domain.Book;
+import com.sy.domain.BookRepository;
 import com.sy.domain.Note;
 import com.sy.domain.NoteRepository;
-import com.sy.dto.BookNoteDetailRequest;
 import com.sy.dto.BookNoteDetailResponse;
+import com.sy.dto.CreateNoteRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,21 +19,12 @@ import lombok.RequiredArgsConstructor;
 public class BookServiceImpl implements BookService {
 
     private final NoteRepository noteRepository;
+    private final BookRepository bookRepository;
     
     @Override
     public Book findBookById(Long id) {
-        // TODO: setter 삭제 후 DB 조회 구현
-
-        Book book = new Book();
-
-        book.setId(id);
-        book.setTitle("책 제목");
-        book.setAuthor("저자명");
-        book.setPublisher("출판사");
-        book.setCoverImage("/images/book-cover.jpg");
-        book.setDescription("책 설명");
-
-        return book;
+        return bookRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Book not found"));
     }
 
     @Override
@@ -45,63 +37,38 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookNoteDetailResponse getBookNoteDetail(Long id){
-        // TODO: setter 삭제 후 DB 조회 구현
-
-        // TODO: API 검증 후 주석 해제
-        // Book book = findBookById(id);
-        // Note note = findNoteById(id);
-
-        BookNoteDetailResponse response = new BookNoteDetailResponse();
+    public BookNoteDetailResponse getBookNoteDetail(Long id) {
         
-        response.setBookId(id);
-        response.setTitle("책 제목");
-        response.setAuthor("저자명");
-        response.setPublisher("출판사");
-        response.setCoverImage("/images/book-cover.jpg");
-        response.setDescription("책 설명");
-
-        response.setNoteId(id);
-        response.setContent("독서 기록 내용");
-        response.setCreatedDate("2025-01-01");
-
-        return response;
+        Book book = findBookById(id);
+        
+        return BookNoteDetailResponse.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImage(book.getCoverImage())
+                .description(book.getDescription())
+                .noteId(book.getNotes().get(0).getId())
+                .content(book.getNotes().get(0).getContent())
+                .createdDate(book.getNotes().get(0).getCreatedDate())
+                .build();
     }
 
     @Override
     public List<Book> getBookList() {
-        // TODO: DB 조회 구현
-        List<Book> bookList = new ArrayList<>();
-
-        Book book1 = new Book();
-        book1.setId(1L);
-        book1.setTitle("책 제목");
-        book1.setAuthor("저자명");
-        book1.setPublisher("출판사");
-        book1.setCoverImage("/images/book-cover.jpg");
-
-        bookList.add(book1);
-
-        Book book2 = new Book();
-        book2.setId(2L);
-        book2.setTitle("책 제목2");
-        book2.setAuthor("저자명2");
-        book2.setPublisher("출판사2");
-        book2.setCoverImage("/images/book-cover2.jpg");
-
-        bookList.add(book2);
-
-        return bookList;
+        return bookRepository.findAll();
     }
 
     @Override
-    public void createNote(BookNoteDetailRequest request) {
-        // TODO: transactional 적용
-
+    @Transactional
+    public void createNote(Long bookId, CreateNoteRequest request) {
+        Book foundBook = bookRepository.findById(bookId) 
+            .orElseThrow(() -> new RuntimeException("Book not found"));
+        
         Note note = Note.builder()
             .title(request.getTitle())
             .content(request.getContent())
-            .createdDate(request.getCreatedDate())
+            .book(foundBook)
             .build();
         
         noteRepository.save(note);
