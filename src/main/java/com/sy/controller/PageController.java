@@ -22,16 +22,6 @@ public class PageController {
 
     private final BookService bookService;
     
-    // @GetMapping("/login")
-    // public String login() {
-    //     return "login";
-    // }
-    
-    // @GetMapping("/join")
-    // public String join() {
-    //     return "join";
-    // }
-    
     @GetMapping("/booklist")
     public List<Book> getBookList() {
         return bookService.getBookList();
