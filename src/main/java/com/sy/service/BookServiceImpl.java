@@ -38,9 +38,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookNoteDetailResponse getBookNoteDetail(Long id) {
+        
         Book book = findBookById(id);
-        Note note = findNoteById(id);
-
+        
         return BookNoteDetailResponse.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
@@ -48,9 +48,9 @@ public class BookServiceImpl implements BookService {
                 .publisher(book.getPublisher())
                 .coverImage(book.getCoverImage())
                 .description(book.getDescription())
-                .noteId(note.getId())
-                .content(note.getContent())
-                .createdDate(note.getCreatedDate())
+                .noteId(book.getNotes().get(0).getId())
+                .content(book.getNotes().get(0).getContent())
+                .createdDate(book.getNotes().get(0).getCreatedDate())
                 .build();
     }
 
