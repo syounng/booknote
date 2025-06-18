@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void createNote(Long bookId, CreateNoteRequest request) {
         Book foundBook = bookRepository.findById(bookId) 
-            .orElseThrow(() -> new RuntimeException("Book not found"));
+            .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
         
         Note note = Note.builder()
             .title(request.getTitle())
@@ -71,23 +71,31 @@ public class BookServiceImpl implements BookService {
             .book(foundBook)
             .build();
         
-        noteRepository.save(note);
+        try {
+            noteRepository.save(note);
+        } catch (Exception e) {
+            throw new RuntimeException("노트를 저장하지 못했습니다.");
+        }
     }
 
     @Override
     public void deleteNote(Long bookId, Long noteId) {
 
         Note foundNote = noteRepository.findById(noteId)
-            .orElseThrow(() -> new RuntimeException("Note not found"));
+            .orElseThrow(() -> new RuntimeException("노트를 찾을 수 없습니다."));
 
         if(foundNote.getBook().getId() != bookId) {
-            throw new RuntimeException("Note not found");
+            throw new RuntimeException("책을 찾을 수 없습니다.");
         }
 
         //양방향 참조로 인한 컬랙션 삭제 처리
         foundNote.getBook().getNotes().remove(foundNote);
-
-        noteRepository.delete(foundNote);
+        
+        try {
+            noteRepository.delete(foundNote);
+        } catch (Exception e) {
+            throw new RuntimeException("노트를 삭제하지 못했습니다.");
+        }
     }
 
 } 
