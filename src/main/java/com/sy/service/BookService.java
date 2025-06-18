@@ -7,6 +7,7 @@ import com.sy.domain.Note;
 import com.sy.dto.BookNoteDetailResponse;
 import com.sy.dto.CreateNoteRequest;
 import com.sy.dto.BookResponse;
+import com.sy.dto.CreateBookRequest;
 
 public interface BookService {
     Book findBookById(Long id);
@@ -15,4 +16,5 @@ public interface BookService {
     List<BookResponse> getBookList();
     void createNote(Long bookId, CreateNoteRequest request, String writer);
     void deleteNote(Long bookId, Long noteId);
+    void createBook(CreateBookRequest request);
 } 
