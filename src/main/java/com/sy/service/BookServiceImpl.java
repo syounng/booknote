@@ -97,13 +97,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void createNote(Long bookId, CreateNoteRequest request) {
+    public void createNote(Long bookId, CreateNoteRequest request, String writer) {
         Book foundBook = bookRepository.findById(bookId) 
             .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
         
         Note note = Note.builder()
             .title(request.getTitle())
             .content(request.getContent())
+            .writer(writer)
             .book(foundBook)
             .build();
         

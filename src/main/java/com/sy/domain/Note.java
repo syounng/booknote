@@ -30,6 +30,9 @@ public class Note {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "writer")
+    private String writer;
+
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
@@ -38,9 +41,10 @@ public class Note {
     private Book book;
 
     @Builder
-    public Note(String title, String content, Book book) {
+    public Note(String title, String content, Book book, String writer) {
         this.title = title;
         this.content = content;
+        this.writer = writer;
         this.book = book;
         this.createdDate = LocalDateTime.now();
     }

@@ -34,7 +34,7 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
-        // JWT 토큰 발급
-        return jwtUtil.generateToken(user.getEmail());
+        // JWT 토큰 발급 (이메일, 이름 포함)
+        return jwtUtil.generateToken(user.getEmail(), user.getName());
     }
 }
