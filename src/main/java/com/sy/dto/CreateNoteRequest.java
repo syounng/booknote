@@ -8,4 +8,5 @@ public class CreateNoteRequest {
     private Long noteId;
     private String title;
     private String content;
+    private String writer;
 }

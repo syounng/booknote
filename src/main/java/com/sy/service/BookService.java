@@ -13,6 +13,6 @@ public interface BookService {
     Note findNoteById(Long id);
     BookNoteDetailResponse getBookNoteDetail(Long id);
     List<BookResponse> getBookList();
-    void createNote(Long id, CreateNoteRequest request);
+    void createNote(Long bookId, CreateNoteRequest request, String writer);
     void deleteNote(Long bookId, Long noteId);
 } 

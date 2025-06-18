@@ -21,9 +21,10 @@ public class JwtUtil {
     }
 
     /* JWT 토큰 생성 (로그인 성공 시) */
-    public String generateToken(String email) {
+    public String generateToken(String email, String name) {
         return Jwts.builder()
                 .setSubject(email) //토큰 주제(이메일)
+                .claim("name", name)
                 .setIssuedAt(new Date()) //토큰 발급 시간
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION)) //토큰 만료 시간
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) //토큰 서명 알고리즘
@@ -38,6 +39,16 @@ public class JwtUtil {
                 .parseClaimsJws(token) //토큰 파싱 및 검증
                 .getBody()
                 .getSubject(); //토큰 주제(이메일) 반환
+    }
+
+    /* 토큰에서 이름 추출 */
+    public String getNameFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("name", String.class);
     }
 
     /* 토큰 유효성 검증 */
