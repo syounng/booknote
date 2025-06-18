@@ -24,14 +24,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findBookById(Long id) {
         return bookRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Book not found"));
+            .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
     }
 
     @Override
     public Note findNoteById(Long id) {
     
         Note note = noteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Note not found"));
+            .orElseThrow(() -> new RuntimeException("노트를 찾을 수 없습니다."));
 
         return note;
     }
@@ -39,19 +39,35 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookNoteDetailResponse getBookNoteDetail(Long id) {
         
-        Book book = findBookById(id);
-        
-        return BookNoteDetailResponse.builder()
-                .bookId(book.getId())
-                .title(book.getTitle())
-                .author(book.getAuthor())
-                .publisher(book.getPublisher())
-                .coverImage(book.getCoverImage())
-                .description(book.getDescription())
-                .noteId(book.getNotes().get(0).getId())
-                .content(book.getNotes().get(0).getContent())
-                .createdDate(book.getNotes().get(0).getCreatedDate())
+        try{
+            Book foundBook = findBookById(id);
+            
+            if(foundBook.getNotes().isEmpty()) {
+                return BookNoteDetailResponse.builder()
+                .bookId(foundBook.getId())
+                .title(foundBook.getTitle())
+                .author(foundBook.getAuthor())
+                .publisher(foundBook.getPublisher())
+                .coverImage(foundBook.getCoverImage())
+                .description(foundBook.getDescription())
                 .build();
+            }else {
+                return BookNoteDetailResponse.builder()
+                        .bookId(foundBook.getId())
+                        .title(foundBook.getTitle())
+                        .author(foundBook.getAuthor())
+                        .publisher(foundBook.getPublisher())
+                        .coverImage(foundBook.getCoverImage())
+                        .description(foundBook.getDescription())
+                        .noteId(foundBook.getNotes().get(0).getId())
+                        .content(foundBook.getNotes().get(0).getContent())
+                        .createdDate(foundBook.getNotes().get(0).getCreatedDate())
+                        .build();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("책을 찾을 수 없습니다.");
+        }
+        
     }
 
     @Override
