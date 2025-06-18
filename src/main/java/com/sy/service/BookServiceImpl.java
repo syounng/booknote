@@ -11,6 +11,8 @@ import com.sy.domain.Note;
 import com.sy.domain.NoteRepository;
 import com.sy.dto.BookNoteDetailResponse;
 import com.sy.dto.CreateNoteRequest;
+import com.sy.dto.BookResponse;
+import com.sy.dto.NoteResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,14 +26,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findBookById(Long id) {
         return bookRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Book not found"));
+            .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
     }
 
     @Override
     public Note findNoteById(Long id) {
     
         Note note = noteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Note not found"));
+            .orElseThrow(() -> new RuntimeException("노트를 찾을 수 없습니다."));
 
         return note;
     }
@@ -39,24 +41,58 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookNoteDetailResponse getBookNoteDetail(Long id) {
         
-        Book book = findBookById(id);
+        try{
+            Book foundBook = findBookById(id);
+            
+            if(foundBook.getNotes().isEmpty()) {
+                return BookNoteDetailResponse.builder()
+                .bookId(foundBook.getId())
+                .title(foundBook.getTitle())
+                .author(foundBook.getAuthor())
+                .publisher(foundBook.getPublisher())
+                .coverImage(foundBook.getCoverImage())
+                .description(foundBook.getDescription())
+                .build();
+            }else {
+                return BookNoteDetailResponse.builder()
+                        .bookId(foundBook.getId())
+                        .title(foundBook.getTitle())
+                        .author(foundBook.getAuthor())
+                        .publisher(foundBook.getPublisher())
+                        .coverImage(foundBook.getCoverImage())
+                        .description(foundBook.getDescription())
+                        .noteId(foundBook.getNotes().get(0).getId())
+                        .content(foundBook.getNotes().get(0).getContent())
+                        .createdDate(foundBook.getNotes().get(0).getCreatedDate())
+                        .build();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("책을 찾을 수 없습니다.");
+        }
         
-        return BookNoteDetailResponse.builder()
-                .bookId(book.getId())
+    }
+
+    @Override
+    public List<BookResponse> getBookList() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream().map(book ->
+            BookResponse.builder()
+                .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .publisher(book.getPublisher())
                 .coverImage(book.getCoverImage())
                 .description(book.getDescription())
-                .noteId(book.getNotes().get(0).getId())
-                .content(book.getNotes().get(0).getContent())
-                .createdDate(book.getNotes().get(0).getCreatedDate())
-                .build();
-    }
-
-    @Override
-    public List<Book> getBookList() {
-        return bookRepository.findAll();
+                .notes(book.getNotes().stream().map(note ->
+                    NoteResponse.builder()
+                        .id(note.getId())
+                        .title(note.getTitle())
+                        .content(note.getContent())
+                        .createdDate(note.getCreatedDate())
+                        .build()
+                ).toList())
+                .build()
+        ).toList();
     }
 
     @Override
