@@ -2,6 +2,7 @@ package com.sy.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,10 @@ public class PageController {
     @PostMapping("/book/{id}")
     public void createNote(@PathVariable Long id, @RequestBody CreateNoteRequest request) {
         bookService.createNote(id, request);
+    }
+
+    @DeleteMapping("/book/{bookId}/{noteId}")
+    public void deleteNote(@PathVariable Long bookId, @PathVariable Long noteId) {
+        bookService.deleteNote(bookId, noteId);
     }
 } 

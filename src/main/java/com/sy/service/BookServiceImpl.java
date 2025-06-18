@@ -74,4 +74,20 @@ public class BookServiceImpl implements BookService {
         noteRepository.save(note);
     }
 
+    @Override
+    public void deleteNote(Long bookId, Long noteId) {
+
+        Note foundNote = noteRepository.findById(noteId)
+            .orElseThrow(() -> new RuntimeException("Note not found"));
+
+        if(foundNote.getBook().getId() != bookId) {
+            throw new RuntimeException("Note not found");
+        }
+
+        //양방향 참조로 인한 컬랙션 삭제 처리
+        foundNote.getBook().getNotes().remove(foundNote);
+
+        noteRepository.delete(foundNote);
+    }
+
 } 

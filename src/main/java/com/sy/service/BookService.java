@@ -13,4 +13,5 @@ public interface BookService {
     BookNoteDetailResponse getBookNoteDetail(Long id);
     List<Book> getBookList();
     void createNote(Long id, CreateNoteRequest request);
+    void deleteNote(Long bookId, Long noteId);
 } 
