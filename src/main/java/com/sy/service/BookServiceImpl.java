@@ -11,6 +11,8 @@ import com.sy.domain.Note;
 import com.sy.domain.NoteRepository;
 import com.sy.dto.BookNoteDetailResponse;
 import com.sy.dto.CreateNoteRequest;
+import com.sy.dto.BookResponse;
+import com.sy.dto.NoteResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,8 +73,26 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBookList() {
-        return bookRepository.findAll();
+    public List<BookResponse> getBookList() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream().map(book ->
+            BookResponse.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImage(book.getCoverImage())
+                .description(book.getDescription())
+                .notes(book.getNotes().stream().map(note ->
+                    NoteResponse.builder()
+                        .id(note.getId())
+                        .title(note.getTitle())
+                        .content(note.getContent())
+                        .createdDate(note.getCreatedDate())
+                        .build()
+                ).toList())
+                .build()
+        ).toList();
     }
 
     @Override

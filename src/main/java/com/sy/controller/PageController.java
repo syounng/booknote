@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sy.domain.Book;
 import com.sy.dto.BookNoteDetailResponse;
+import com.sy.dto.BookResponse;
 import com.sy.dto.CreateNoteRequest;
 import com.sy.service.BookService;
 
@@ -23,7 +23,7 @@ public class PageController {
     private final BookService bookService;
     
     @GetMapping("/booklist")
-    public List<Book> getBookList() {
+    public List<BookResponse> getBookList() {
         return bookService.getBookList();
     }
 
