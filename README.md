@@ -1,5 +1,8 @@
 # BookNote 프로젝트
 
+✅ closed PR에서 트러블 슈팅 참고
+https://github.com/syounng/booknote/pulls?q=is%3Apr+is%3Aclosed%27
+
 ## 개요
 BookNote는 JWT 기반 인증을 사용하는 독서 노트 관리 애플리케이션입니다. 사용자는 책을 등록하고, 각 책에 대한 독서 노트를 작성/관리할 수 있습니다.
 
